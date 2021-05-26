@@ -1,35 +1,22 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    <el-time-picker
-    v-model="value1"
-    :picker-options="{
-      selectableRange: '18:30:00 - 20:30:00'
-    }"
-    placeholder="任意时间点">
-    </el-time-picker>
-    <el-time-picker
-      arrow-control
-      v-model="value2"
-      :picker-options="{
-        selectableRange: '18:30:00 - 20:30:00'
-      }"
-      placeholder="任意时间点">
-    </el-time-picker>
-  </div>
-</template>
+  <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
+  点我打开
+</el-button>
 
+<el-drawer
+  title="我是标题"
+  v-model="drawer"
+  :with-header="false">
+  <span>我来啦!</span>
+</el-drawer>
+</template>
 
 <script>
   export default {
     data() {
       return {
-        value1: new Date(2016, 9, 10, 18, 40),
-        value2: new Date(2016, 9, 10, 18, 40)
+        drawer: false,
       };
     }
-  }
+  };
 </script>
-
-
-
