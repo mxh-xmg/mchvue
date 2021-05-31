@@ -2,18 +2,18 @@
   <div class="el-container">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="账号密码登录" name="first">
-            <el-form status-icon :rules="rules" :model="user" ref="ruleForm" class="demo-ruleForm">
+            <el-form  status-icon :model="user" :rules="rules"   ref="user" class="demo-ruleForm">
                 <el-form-item prop="name">
                     <el-input type="text" placeholder="请输入用户名" v-model="user.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item  prop="pass">
                     <el-input type="password" placeholder="请输入密码" v-model="user.pass" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item  prop="yzm" required>
+                <el-form-item  prop="yzm">
                     <el-input></el-input> 
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" >提交</el-button>
+                    <el-button type="primary" v-on:click="submit">提交</el-button>
                     <el-button>重置</el-button>
                 </el-form-item>
             </el-form>
@@ -55,14 +55,31 @@
         },
         activeName: 'first',
         user:{
-            name:'admin',
-            pass:'2222'
+            name:'admin123',
+            pass:'123456'
         }
       }
     },
     methods: {
       submit(){
-
+          this.$refs['user'].validate((valid) => {
+          if (!valid) {
+            console.log('error submit!!');
+            return false;
+          }
+          this.axios.post('http://localhost:3000/login',this.user).then((data)=>{
+          //id,username,password,create_time,update_time,status 
+          //密码加密  express 实现用户密码加密  crypto  盐值 hdhas
+           if(data.data.code==200){
+             document.cookie = 'token='+data.data.token
+             this.$router.push({name:'About'})
+           }else{
+             alert(data.data.msg)
+           }
+          }).catch((err)=>{
+              console.log(err)
+          })
+        });
       },
       handleClick(tab, event) {
         console.log(tab, event);
@@ -73,7 +90,8 @@
     },
     mounted:()=>{
         console.log('')
-    }
+    },
+   
   };
 </script>
 <style lang="less">
